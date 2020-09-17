@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Александр Слав](https://up.htmlacademy.ru/javascript/21/user/1456071).
-* Наставник: `Неизвестно`.
+* Наставник: [Андрей Слесаренко](https://htmlacademy.ru/profile/swen).
 
 ---
 
