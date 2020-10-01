@@ -57,7 +57,6 @@ window.getRandomElem = function (array) {
   return array[window.getRandomInt(0, array.length - 1)];
 };
 
-
 function generateComments() {
   const commentsArr = [];
 
@@ -71,7 +70,6 @@ function generateComments() {
 
   return commentsArr;
 }
-
 
 function generatePicturesComponents(number = RANDOM_USERS) {
   const pictures = [];
