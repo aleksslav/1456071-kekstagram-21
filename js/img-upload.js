@@ -1,47 +1,52 @@
 'use strict';
 
-const uploadOverlay = document.querySelector(`.img-upload__overlay`);
-const imgUpload = document.querySelector(`.img-upload`);
-const uploadCancel = imgUpload.querySelector(`.img-upload__cancel`);
-const uploadStart = imgUpload.querySelector(`.img-upload__control`);
+(() => {
+  const body = document.body;
+  const upload = document.querySelector(`#upload-file`);
+  const uploadOverlay = document.querySelector(`.img-upload__overlay`);
+  const uploadCancel = uploadOverlay.querySelector(`#upload-cancel`);
+  const commentsText = document.querySelector(`.text__description`);
 
-const onPopupEscPress = function (evt) {
-  if (evt.key === `Escape`) {
-    evt.preventDefault();
-    closePopup();
-  }
-};
+  const onOverlayEscPress = (evt) => {
+    if (evt.key === window.util.KEYDOWN.esc) {
+      if (evt.target === window.form.hashtagsText || evt.target === commentsText) {
+        evt.preventDefault();
+      } else {
+        evt.preventDefault();
+        closeOverlay();
+      }
+    }
+  };
 
-const openPopup = function () {
-  document.body.classList.add(`modal-open`);
-  uploadOverlay.classList.remove(`hidden`);
+  const openOverlay = () => {
+    uploadOverlay.classList.remove(`hidden`);
+    body.classList.add(`modal-open`);
+    window.effects.filterScale.classList.add(`hidden`);
+    document.addEventListener(`keydown`, onOverlayEscPress);
+  };
 
-  document.addEventListener(`keydown`, onPopupEscPress);
-};
+  const closeOverlay = () => {
+    uploadOverlay.classList.add(`hidden`);
+    body.classList.remove(`modal-open`);
+    document.removeEventListener(`keydown`, onOverlayEscPress);
+    window.effects.scaleSmaller.removeEventListener(`click`, window.effects.declineScale);
+    window.effects.scaleBigger.removeEventListener(`click`, window.effects.increaseScale);
+    upload.value = ``;
+    window.effects.imgPreview.style.transform = `scale(1)`;
+    window.effects.imgPreview.style.filter = ``;
+    window.effects.imgPreview.className = ``;
+    window.form.hashtagsText.value = ``;
+  };
 
-const closePopup = function () {
-  document.body.classList.remove(`modal-open`);
-  uploadOverlay.classList.add(`hidden`);
+  upload.addEventListener(`change`, () => {
+    openOverlay();
+  });
 
-  document.addEventListener(`keydown`, onPopupEscPress);
-};
+  uploadCancel.addEventListener(`click`, () => {
+    closeOverlay();
+  });
 
-uploadStart.addEventListener(`click`, function () {
-  openPopup();
-});
-
-imgUpload.addEventListener(`keydown`, function (evt) {
-  if (evt.key === `Enter`) {
-    openPopup();
-  }
-});
-
-uploadCancel.addEventListener(`click`, function () {
-  closePopup();
-});
-
-uploadCancel.addEventListener(`keydown`, function (evt) {
-  if (evt.key === `Enter`) {
-    closePopup();
-  }
-});
+  uploadCancel.addEventListener(`keydown`, (evt) => {
+    window.util.onPressEnter(evt, closeOverlay);
+  });
+})();

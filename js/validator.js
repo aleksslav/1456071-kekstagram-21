@@ -1,65 +1,87 @@
 'use strict';
 
-const hastagInput = document.querySelector(`.text__hashtags`);
-const regular = /^#[a-zA-Z0-9А-ЯЁа-яё]*$/;
-const space = ` `;
-const MIN_LENGTH = 2;
-const MAX_LENGTH = 20;
-const MAX_ARRAY_LENGTH = 5;
+(() => {
+  const MAX_HASHTAGS = 5;
+  const MAX_SYMBOL = 20;
+  const REG = /#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}/i;
+  const VALIDATION_MESSAGES = {
+    maxTags: `не больше 5 хэштегов`,
+    repeatTags: `хэштеги не должны повторяться`,
+    regularTags: `недопустимые символы`,
+    numberTags: `длина хэштега не более 20 символов`,
+    success: ``,
+  };
 
-const checkInput = (array) => {
-  if (array.length > MAX_ARRAY_LENGTH) {
-    hastagInput.setCustomValidity(`Максимальное количество хештегов: 5`);
-    return;
-  }
+  const form = document.querySelector(`.img-upload__form`);
+  const hashtagsText = form.querySelector(`.text__hashtags`);
 
-  for (let i = 0; i < array.length; i++) {
-    let element = array[i];
+  const hashtagsNumber = (hashtaglist) => {
+    return hashtaglist.length > MAX_HASHTAGS;
+  };
 
-    const valueLength = element.length;
-    hastagInput.setCustomValidity(``);
-    if (valueLength < MIN_LENGTH) {
-      hastagInput.setCustomValidity(
-          `Ещё  ${MIN_LENGTH - valueLength} симв.`
-      );
-      break;
-    } else if (valueLength > MAX_LENGTH) {
-      hastagInput.setCustomValidity(
-          `Удалите лишние ${valueLength - MAX_LENGTH} симв.`
-      );
-      break;
-    } else if (regular.test(element) === false) {
-      hastagInput.setCustomValidity(
-          `Хэш-тег должен состоять из букв и чисел и не может содержать пробелы или спецсимволы.`
-      );
-      break;
-    } else if (array.length > 1) {
-      const hasDuplicates = (arr) =>
-        arr.some((item) => arr.indexOf(item) !== arr.lastIndexOf(item));
-
-      if (hasDuplicates(array) === true) {
-        hastagInput.setCustomValidity(
-            `Один и тот же хэш-тег не может быть использован дважды.`
-        );
-        break;
+  const hashtagsRepeat = (hashtag, hashtaglist) => {
+    for (let j = 0; j < hashtaglist.length; j++) {
+      if (hashtag === hashtaglist[j]) {
+        return true;
       }
-    } else {
-      hastagInput.setCustomValidity(``);
     }
-  }
-  hastagInput.reportValidity();
-};
-const hastagInputHandler = function () {
-  const inputArray = hastagInput.value.toLowerCase().split(space);
-  checkInput(inputArray);
-};
-hastagInput.addEventListener(`input`, hastagInputHandler);
+    return false;
+  };
 
-hastagInput.addEventListener(`focus`, function () {
-  document.removeEventListener(`keydown`, window.onWindowEscPress);
-});
-hastagInput.addEventListener(`blur`, function () {
-  document.addEventListener(`keydown`, window.onWindowEscPress);
-});
+  const regularHashtag = (hashtag) => {
+    return !REG.test(hashtag);
+  };
 
+  const hashtagSymbols = (hashtag) => {
+    return hashtag.length > MAX_SYMBOL;
+  };
 
+  const showValidationMessage = (msg) => {
+    hashtagsText.setCustomValidity(msg);
+    hashtagsText.reportValidity();
+  };
+
+  const hashtagValidity = () => {
+    const hashes = hashtagsText.value.toLowerCase().trim();
+    if (!hashes) {
+      return ``;
+    }
+    const hashtags = hashes.split(` `);
+    if (hashtagsNumber(hashtags)) {
+      return VALIDATION_MESSAGES.maxTags;
+    }
+    for (let i = 0; i < hashtags.length; i++) {
+      const hashtag = hashtags[i];
+      if (hashtagsRepeat(hashtag, hashtags.slice(i + 1))) {
+        return VALIDATION_MESSAGES.repeatTags;
+      }
+      if (regularHashtag(hashtag)) {
+        return VALIDATION_MESSAGES.regularTags;
+      }
+      if (hashtagSymbols(hashtag)) {
+        return VALIDATION_MESSAGES.numberTags;
+      }
+    }
+    return VALIDATION_MESSAGES.success;
+  };
+
+  const formSubmit = (evt) => {
+    evt.preventDefault();
+    const validationMessage = hashtagValidity();
+    showValidationMessage(validationMessage);
+    if (validationMessage === VALIDATION_MESSAGES.success) {
+      form.submit();
+    }
+  };
+
+  hashtagsText.addEventListener(`input`, () => {
+    showValidationMessage(VALIDATION_MESSAGES.success);
+  });
+  form.addEventListener(`submit`, formSubmit);
+  form.addEventListener(`change`, window.effects.effectChangeHandler);
+
+  window.form = {
+    hashtagsText,
+    form,
+  };
+})();

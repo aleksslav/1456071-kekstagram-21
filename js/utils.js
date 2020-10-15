@@ -7,4 +7,26 @@ window.getRandomInt = (min = 0, max = Number.MAX_SAFE_INTEGER) => {
   return Math.floor(rand);
 };
 
+(() => {
+  const KEYDOWN = {
+    enter: `Enter`,
+    esc: `Escape`,
+  };
+  const onPressEsc = (evt, callback) => {
+    if (evt.key === KEYDOWN.esc) {
+      evt.preventDefault();
+      callback();
+    }
+  };
 
+  const onPressEnter = (evt, callback) => {
+    if (evt.key === KEYDOWN.enter) {
+      callback(evt);
+    }
+  };
+  window.util = {
+    onPressEnter,
+    onPressEsc,
+    KEYDOWN,
+  };
+})();
