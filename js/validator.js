@@ -3,11 +3,11 @@
 (() => {
   const MAX_HASHTAGS = 5;
   const MAX_SYMBOL = 20;
-  const REG = /#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}/i;
+  const REG = /^#[a-zA-Z0-9]{1,19}$/i;
   const VALIDATION_MESSAGES = {
     maxTags: `не больше 5 хэштегов`,
     repeatTags: `хэштеги не должны повторяться`,
-    regularTags: `недопустимые символы`,
+    regularTags: `название хэш-тега должено начинается с символа # состоять из букв и чисел и не может содержать пробелы или спецсимволы (@, $ и т. п.).`,
     numberTags: `длина хэштега не более 20 символов`,
     success: ``,
   };
