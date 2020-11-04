@@ -36,6 +36,7 @@
     selectFilter(defaultFilterButton);
     clearPhotos();
     window.gallery.createPictures(window.gallery.getPhotos());
+    window.preview.initPictureHandlers();
   };
 
   const getCountCommentsPhotos = () => {
@@ -46,6 +47,7 @@
     window.gallery.createPictures(commentFilterPhoto.sort((left, right) => {
       return right.comments.length - left.comments.length;
     }));
+    window.preview.initPictureHandlers();
   };
 
   const getRandomPhotos = () => {
@@ -56,6 +58,7 @@
     randomFilterPhoto = randomFilterPhoto.slice(0, 10);
     clearPhotos();
     window.gallery.createPictures(randomFilterPhoto);
+    window.preview.initPictureHandlers();
   };
 
   const defaultFilter = window.utils.debounce(getDefaultPhotos);
