@@ -1,6 +1,6 @@
 'use strict';
 
-const FILE_TYPE = [`gif`, `jpg`, `jpeg`, `png`];
+const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 const body = document.body;
 const upload = document.querySelector(`#upload-file`);
 const uploadOverlay = document.querySelector(`.img-upload__overlay`);
@@ -39,13 +39,14 @@ const closeOverlay = () => {
   window.effects.imgPreview.style.filter = ``;
   window.effects.imgPreview.className = ``;
   window.form.hashtagsText.innerHTML = ``;
+  window.form.form.reset();
 };
 
 const uploadImage = () => {
   const file = upload.files[0];
   const fileName = file.name.toLowerCase();
 
-  const matches = FILE_TYPE.some((ending) => {
+  const matches = FILE_TYPES.some((ending) => {
     return fileName.endsWith(ending);
   });
 

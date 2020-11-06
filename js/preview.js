@@ -34,7 +34,7 @@ const modalCloseHandler = () => {
   socialComments.innerHTML = ``;
   commentsLoader.classList.remove(`hidden`);
   document.removeEventListener(`keydown`, window.utils.onPressEsc);
-  commentsLoader.removeEventListener(`click`, getCommentsHandler);
+  commentsLoader.removeEventListener(`click`, commentsGetMoreHandler);
   commentsLoader.removeEventListener(`keydown`, window.utils.onPressEnter);
 };
 
@@ -47,13 +47,13 @@ const modalOpenHandler = (evt) => {
   document.addEventListener(`keydown`, (keydownEvent) => {
     window.utils.onPressEsc(keydownEvent, modalCloseHandler);
   });
-  commentsLoader.addEventListener(`click`, getCommentsHandler);
+  commentsLoader.addEventListener(`click`, commentsGetMoreHandler);
   commentsLoader.addEventListener(`keydown`, (keyEvt) => {
-    window.utils.onPressEnter(keyEvt, getCommentsHandler);
+    window.utils.onPressEnter(keyEvt, commentsGetMoreHandler);
   });
 };
 
-const getCommentsHandler = () => {
+const commentsGetMoreHandler = () => {
   const commentsList = document.querySelectorAll(`.social__comment`);
   const count = commentsList.length;
   const index = count + NEW_COMMENTS;
@@ -76,7 +76,7 @@ const renderBigPicture = (photo) => {
   description.textContent = photo.description;
   commentsCount.textContent = photo.comments.length;
   photoComments = photo.comments;
-  getCommentsHandler(photo.comments);
+  commentsGetMoreHandler(photo.comments);
 };
 
 const initPictureHandlers = () => {
