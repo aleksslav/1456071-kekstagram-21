@@ -115,8 +115,8 @@ const formSubmit = (evt) => {
   if (validationMessage === VALIDATION_MESSAGES.success) {
     window.api.upload(new FormData(form), onSuccess, onError);
   }
-  form.reset();
   window.overlay.closeOverlay();
+  form.reset();
 };
 
 hashtagsText.addEventListener(`input`, () => {
