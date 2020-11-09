@@ -6,7 +6,7 @@ const REG = /#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}/i;
 const VALIDATION_MESSAGES = {
   maxTags: `не больше 5 хэштегов`,
   repeatTags: `хэштеги не должны повторяться`,
-  regularTags: `недопустимые символы`,
+  regularTags: `название хэш-тега должено начинается с символа # состоять из букв и чисел и не может содержать пробелы или спецсимволы (@, $ и т. п.).`,
   numberTags: `длина хэштега не более 20 символов`,
   success: ``,
 };
@@ -114,9 +114,9 @@ const formSubmit = (evt) => {
   showValidationMessage(validationMessage);
   if (validationMessage === VALIDATION_MESSAGES.success) {
     window.api.upload(new FormData(form), onSuccess, onError);
+    window.overlay.closeOverlay();
+    form.reset();
   }
-  window.overlay.closeOverlay();
-  form.reset();
 };
 
 hashtagsText.addEventListener(`input`, () => {

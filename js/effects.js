@@ -55,7 +55,7 @@ const scaleBigger = document.querySelector(`.scale__control--bigger`);
 
 const declineScale = () => {
   const value = parseInt(scaleValue.value, 10);
-  if (value > SCALE_STEP) {
+  if (value > 25) {
     const valueNew = value - SCALE_STEP;
     scaleValue.value = valueNew + `%`;
     const valueTransform = valueNew / MAX_SCALE_VALUE;
