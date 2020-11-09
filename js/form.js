@@ -90,7 +90,6 @@ const onSuccess = () => {
 
 const onError = () => {
   const errorWindow = errorModal.cloneNode(true);
-  console.log(errorWindow)
   const errorButton = errorWindow.querySelector(`.error__button`);
   errorButton.addEventListener(`click`, () => {
     errorWindow.remove();
